@@ -64,7 +64,7 @@
 
                 <li class="nav-item">
 
-                    <a class="nav-link"
+                    <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}"
                        href="{{ route('dashboard') }}">
 
                         الرئيسية
@@ -75,7 +75,7 @@
 
                 <li class="nav-item">
 
-                    <a class="nav-link"
+                    <a class="nav-link {{ request()->routeIs('documents.index') ? 'active' : '' }}"
                        href="{{ route('documents.index') }}">
 
                         الأرشيف
@@ -86,7 +86,7 @@
 
                 <li class="nav-item">
 
-                    <a class="nav-link"
+                    <a class="nav-link {{ request()->routeIs('documents.create') ? 'active' : '' }}"
                        href="{{ route('documents.create') }}">
 
                         مستند جديد

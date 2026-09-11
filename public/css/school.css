@@ -18,8 +18,13 @@ body {
     color: rgba(255,255,255,.85);
 }
 
-.school-navbar .nav-link:hover {
+.school-navbar .nav-link:hover,
+.school-navbar .nav-link.active {
     color: #fff;
+}
+
+.school-navbar .nav-link.active {
+    font-weight: 700;
 }
 
 .director-name {
@@ -232,6 +237,134 @@ body {
     margin-top: 25px;
 }
 
+.signed-files-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.signed-file-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px;
+    border: 1px solid #e8edf2;
+    border-radius: 10px;
+    background: #fafbfd;
+}
+
+.signed-file-details {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.signed-file-details strong,
+.signed-file-details small {
+    display: block;
+}
+
+.signed-file-details strong {
+    overflow-wrap: anywhere;
+}
+
+.signed-file-details small {
+    color: #7b8794;
+    margin-top: 4px;
+}
+
+.signed-file-icon {
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #17324d;
+    background: #eef3f8;
+    border-radius: 10px;
+}
+
+.documents-filter-card {
+    padding: 22px 25px;
+}
+
+.documents-filter-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.documents-count {
+    color: #7b8794;
+    font-size: 14px;
+    margin-top: 4px;
+}
+
+.document-cell,
+.recipient-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.document-cell {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.document-icon {
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #eef3f8;
+    color: #17324d;
+    border-radius: 10px;
+}
+
+.document-cell small,
+.recipient-cell small {
+    color: #7b8794;
+}
+
+.category-pill {
+    display: inline-block;
+    background: #eef3f8;
+    color: #17324d;
+    border-radius: 999px;
+    padding: 4px 12px;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 48px 16px;
+    color: #7b8794;
+}
+
+.empty-state i {
+    font-size: 36px;
+    margin-bottom: 12px;
+    color: #17324d;
+}
+
+.empty-state h5 {
+    color: #263238;
+    margin-bottom: 6px;
+}
+
+.documents-table tbody tr:hover {
+    background: #f8fafc;
+}
+
 @media (max-width: 768px) {
 
     .page-header {
@@ -246,6 +379,11 @@ body {
 
     .public-card {
         padding: 25px;
+    }
+
+    .signed-file-item {
+        align-items: flex-start;
+        flex-direction: column;
     }
 
 }

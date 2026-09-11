@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Document;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\View\View;
 
 class PublicDocumentController extends Controller
 {
-    public function show(string $token)
+    public function show(string $token): View
     {
         $document = Document::where(
             'access_token',
@@ -24,17 +25,11 @@ class PublicDocumentController extends Controller
     public function sign(
         Request $request,
         string $token
-    ) {
+    ): View {
         $document = Document::where(
             'access_token',
             $token
         )->firstOrFail();
-
-        if ($document->status !== 'pending') {
-            return back()->withErrors([
-                'document' => 'هذا المستند تمت معالجته مسبقًا.'
-            ]);
-        }
 
         $validated = $request->validate([
             'signature_name' => [
@@ -44,10 +39,18 @@ class PublicDocumentController extends Controller
                 'max:255',
             ],
 
-            'signed_file' => [
+            'signed_files' => [
+                'required',
+                'array',
+                'min:1',
+                'max:10',
+            ],
+
+            'signed_files.*' => [
                 'required',
                 'file',
                 'mimes:pdf,jpg,jpeg,png',
+                'extensions:pdf,jpg,jpeg,png',
                 'max:10240',
             ],
 
@@ -56,25 +59,36 @@ class PublicDocumentController extends Controller
             ],
         ]);
 
-        $signedPath = $request
-            ->file('signed_file')
-            ->store('signed-documents');
+        foreach ($request->file('signed_files') as $uploadedFile) {
+            $path = $uploadedFile->store(
+                'signed-documents/'.$document->id,
+                'private'
+            );
+
+            $document->signedFiles()->create([
+                'original_name' => $uploadedFile->getClientOriginalName(),
+                'path' => $path,
+                'mime_type' => $uploadedFile->getMimeType() ?? 'application/octet-stream',
+                'size' => $uploadedFile->getSize(),
+                'signature_name' => $validated['signature_name'],
+                'ip_address' => $request->ip(),
+            ]);
+        }
 
         $document->update([
-            'signed_file' => $signedPath,
-
             'status' => 'completed',
-
             'signed_at' => now(),
-
             'completed_at' => now(),
-
             'ip_address' => $request->ip(),
         ]);
 
         return view(
             'public.completed',
-            compact('document')
+            [
+                'document' => $document,
+                'signatureName' => $validated['signature_name'],
+                'uploadedFilesCount' => count($validated['signed_files']),
+            ]
         );
     }
 

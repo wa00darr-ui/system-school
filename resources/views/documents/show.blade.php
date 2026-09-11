@@ -181,20 +181,84 @@
 
 
     <div class="content-card mt-4">
-    <h4>
-        الإجراء بعد إرفاق المستند
-    </h4>
 
-    <p class="text-muted">
-        • المستفيد من الملف استلام تم
-    </p>
+        <div class="card-header-custom">
 
-    <a href="{{ Storage::disk('public')->url($document->signed_file) }}"
-       target="_blank"
-       class="btn btn-primary">
-        عرض المرفق
-    </a>
-</div>
+            <div>
+
+                <h4>
+                    الملفات الموقعة
+                </h4>
+
+                <p class="text-muted mb-0">
+                    {{ $document->signedFiles->count() }} ملف مرفوع
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="signed-files-list">
+
+            @forelse($document->signedFiles as $signedFile)
+
+                <div class="signed-file-item">
+
+                    <div class="signed-file-details">
+
+                        <span class="signed-file-icon">
+                            <i class="fa-solid fa-file-arrow-down"></i>
+                        </span>
+
+                        <div>
+
+                            <strong>
+                                {{ $signedFile->original_name }}
+                            </strong>
+
+                            <small>
+                                رفعه {{ $signedFile->signature_name }}
+                                في {{ $signedFile->created_at->format('Y/m/d H:i') }}
+                                — {{ number_format($signedFile->size / 1024, 1) }} KB
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                    <a
+                        href="{{ route('signed-files.download', $signedFile) }}"
+                        class="btn btn-sm btn-outline-primary">
+
+                        <i class="fa-solid fa-download"></i>
+
+                        تنزيل
+
+                    </a>
+
+                </div>
+
+            @empty
+
+                <div class="empty-state py-4">
+
+                    <i class="fa-solid fa-folder-open"></i>
+
+                    <h5>
+                        لم يتم رفع ملفات بعد
+                    </h5>
+
+                    <p class="mb-0">
+                        ستظهر الملفات هنا بعد إرسالها من رابط المستفيد.
+                    </p>
+
+                </div>
+
+            @endforelse
+
+        </div>
+
+    </div>
 
 
 

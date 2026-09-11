@@ -65,8 +65,6 @@
             </a>
 
 
-            @if($document->status === 'pending')
-
             <form
                 action="{{ route('public.document.sign', $document->access_token) }}"
                 method="POST"
@@ -119,20 +117,22 @@
 
                     <label class="form-label">
 
-                        إرفاق المستند بعد التوقيع
+                        إرفاق المستندات بعد التوقيع
 
                     </label>
 
                     <input
                         type="file"
-                        name="signed_file"
+                        name="signed_files[]"
                         class="form-control"
                         accept=".pdf,.jpg,.jpeg,.png"
+                        multiple
                         required>
 
                     <small class="text-muted">
 
-                        يسمح PDF أو JPG أو PNG بحد أقصى 10MB.
+                        يمكنك اختيار حتى 10 ملفات. يسمح PDF أو JPG أو PNG،
+                        وبحد أقصى 10MB لكل ملف.
 
                     </small>
 
@@ -150,18 +150,6 @@
                 </button>
 
             </form>
-
-            @else
-
-                <div class="alert alert-success">
-
-                    <i class="fa-solid fa-circle-check"></i>
-
-                    تم استلام هذا المستند مسبقًا.
-
-                </div>
-
-            @endif
 
         </div>
 

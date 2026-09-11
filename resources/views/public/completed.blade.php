@@ -24,8 +24,8 @@
 
     <p class="text-muted">
 
-        تم استلام المستند والتوقيع الإلكتروني
-        وحفظهما في النظام.
+        تم استلام {{ $uploadedFilesCount }} من الملفات
+        وحفظها في النظام بنجاح.
 
     </p>
 
@@ -49,7 +49,7 @@
                 الموقّع:
             </strong>
 
-            {{ $document->signature_name }}
+            {{ $signatureName }}
 
         </p>
 

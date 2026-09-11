@@ -1,109 +1,82 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\PublicDocumentController;
-
-
-
+use App\Http\Controllers\SignedFileController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return redirect()->route('login');
 });
 
-
-
-
 Route::middleware('guest')->group(function () {
 
     Route::get('/login', [
         AuthController::class,
-        'showLogin'
+        'showLogin',
     ])->name('login');
 
     Route::post('/login', [
         AuthController::class,
-        'login'
+        'login',
     ])->name('login.store');
 
 });
 
-
-
-
 Route::post('/logout', [
     AuthController::class,
-    'logout'
+    'logout',
 ])->middleware('auth')->name('logout');
-
-
-
 
 Route::middleware('auth')->group(function () {
 
     Route::get('/dashboard', [
         DashboardController::class,
-        'index'
+        'index',
     ])->name('dashboard');
-
-
-
 
     Route::get('/documents', [
         DocumentController::class,
-        'index'
+        'index',
     ])->name('documents.index');
-
 
     Route::get('/documents/create', [
         DocumentController::class,
-        'create'
+        'create',
     ])->name('documents.create');
-
 
     Route::post('/documents', [
         DocumentController::class,
-        'store'
+        'store',
     ])->name('documents.store');
-
 
     Route::get('/documents/{document}', [
         DocumentController::class,
-        'show'
+        'show',
     ])->name('documents.show');
-
 
     Route::delete('/documents/{document}', [
         DocumentController::class,
-        'destroy'
+        'destroy',
     ])->name('documents.destroy');
 
+    Route::get('/signed-files/{signedFile}/download', SignedFileController::class)
+        ->name('signed-files.download');
 });
-
-
-
 
 Route::get('/document/{token}', [
     PublicDocumentController::class,
-    'show'
+    'show',
 ])->name('public.document');
-
 
 Route::get('/document/{token}/download', [
     PublicDocumentController::class,
-    'downloadOriginal'
+    'downloadOriginal',
 ])->name('public.document.download');
-
 
 Route::post('/document/{token}/sign', [
     PublicDocumentController::class,
-    'sign'
-])->name('public.document.sign');
-
-Route::get('/document/{token}/download', [
-    PublicDocumentController::class,
-    'downloadOriginal'
-])->name('public.document.download');
+    'sign',
+])->middleware('throttle:10,1')->name('public.document.sign');
