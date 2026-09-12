@@ -275,6 +275,20 @@ body {
     margin-top: 4px;
 }
 
+.signed-file-actions {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    gap: 8px;
+}
+
+.signed-file-preview-frame {
+    width: 100%;
+    height: 75vh;
+    border: 0;
+    display: block;
+}
+
 .signed-file-icon {
     width: 42px;
     height: 42px;

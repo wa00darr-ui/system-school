@@ -226,15 +226,36 @@
 
                     </div>
 
-                    <a
-                        href="{{ route('signed-files.download', $signedFile) }}"
-                        class="btn btn-sm btn-outline-primary">
+                    <div class="signed-file-actions">
 
-                        <i class="fa-solid fa-download"></i>
+                        @if($signedFile->isPreviewable())
 
-                        تنزيل
+                            <button
+                                type="button"
+                                class="btn btn-sm btn-outline-secondary signed-file-preview-button"
+                                data-preview-url="{{ route('signed-files.preview', $signedFile) }}"
+                                data-download-url="{{ route('signed-files.download', $signedFile) }}"
+                                data-file-name="{{ $signedFile->original_name }}">
 
-                    </a>
+                                <i class="fa-solid fa-eye"></i>
+
+                                عرض
+
+                            </button>
+
+                        @endif
+
+                        <a
+                            href="{{ route('signed-files.download', $signedFile) }}"
+                            class="btn btn-sm btn-outline-primary">
+
+                            <i class="fa-solid fa-download"></i>
+
+                            تنزيل
+
+                        </a>
+
+                    </div>
 
                 </div>
 
@@ -283,6 +304,77 @@
             </button>
 
         </form>
+
+    </div>
+
+</div>
+
+
+<div
+    class="modal fade"
+    id="signedFilePreviewModal"
+    tabindex="-1"
+    aria-labelledby="signedFilePreviewLabel"
+    aria-hidden="true">
+
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5
+                    class="modal-title"
+                    id="signedFilePreviewLabel">
+
+                    معاينة الملف
+
+                </h5>
+
+                <button
+                    type="button"
+                    class="btn-close me-0 ms-2"
+                    data-bs-dismiss="modal"
+                    aria-label="إغلاق">
+                </button>
+
+            </div>
+
+            <div class="modal-body p-0">
+
+                <iframe
+                    id="signedFilePreviewFrame"
+                    class="signed-file-preview-frame"
+                    title="معاينة الملف">
+                </iframe>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <a
+                    id="signedFilePreviewDownload"
+                    href="#"
+                    class="btn school-btn">
+
+                    <i class="fa-solid fa-download"></i>
+
+                    تنزيل
+
+                </a>
+
+                <button
+                    type="button"
+                    class="btn btn-outline-secondary"
+                    data-bs-dismiss="modal">
+
+                    إغلاق
+
+                </button>
+
+            </div>
+
+        </div>
 
     </div>
 

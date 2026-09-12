@@ -125,6 +125,96 @@ document.addEventListener(
 );
 
 
+document.addEventListener(
+    'click',
+    function (event) {
+
+        const button =
+            event.target.closest(
+                '.signed-file-preview-button'
+            );
+
+
+        if (!button) {
+            return;
+        }
+
+
+        openSignedFilePreview(
+            button.dataset.previewUrl,
+            button.dataset.downloadUrl,
+            button.dataset.fileName
+        );
+
+    }
+);
+
+
+function openSignedFilePreview(
+    previewUrl,
+    downloadUrl,
+    fileName
+) {
+
+    const modalElement =
+        document.getElementById(
+            'signedFilePreviewModal'
+        );
+
+    const frame =
+        document.getElementById(
+            'signedFilePreviewFrame'
+        );
+
+    const label =
+        document.getElementById(
+            'signedFilePreviewLabel'
+        );
+
+    const downloadLink =
+        document.getElementById(
+            'signedFilePreviewDownload'
+        );
+
+
+    if (
+        !modalElement ||
+        !frame ||
+        !label ||
+        !downloadLink
+    ) {
+        return;
+    }
+
+
+    label.textContent = fileName;
+
+    frame.src = previewUrl;
+
+    downloadLink.href = downloadUrl;
+
+
+    const modal =
+        bootstrap.Modal.getOrCreateInstance(
+            modalElement
+        );
+
+
+    modalElement.addEventListener(
+        'hidden.bs.modal',
+        function () {
+
+            frame.src = 'about:blank';
+
+        },
+        { once: true }
+    );
+
+
+    modal.show();
+}
+
+
 function copyDocumentLink() {
 
     const input =

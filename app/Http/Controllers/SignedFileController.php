@@ -9,10 +9,9 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class SignedFileController extends Controller
 {
-    public function __invoke(SignedFile $signedFile): StreamedResponse
+    public function download(SignedFile $signedFile): StreamedResponse
     {
-        /** @var FilesystemAdapter $disk */
-        $disk = Storage::disk('private');
+        $disk = $this->disk();
 
         abort_unless(
             $disk->exists($signedFile->path),
@@ -23,5 +22,38 @@ class SignedFileController extends Controller
             $signedFile->path,
             $signedFile->original_name
         );
+    }
+
+    public function preview(SignedFile $signedFile): StreamedResponse
+    {
+        $disk = $this->disk();
+
+        abort_unless(
+            $signedFile->isPreviewable(),
+            404
+        );
+
+        abort_unless(
+            $disk->exists($signedFile->path),
+            404
+        );
+
+        return $disk->response(
+            $signedFile->path,
+            $signedFile->original_name,
+            [
+                'Content-Type' => $signedFile->mime_type,
+                'X-Content-Type-Options' => 'nosniff',
+            ],
+            'inline'
+        );
+    }
+
+    private function disk(): FilesystemAdapter
+    {
+        /** @var FilesystemAdapter $disk */
+        $disk = Storage::disk('private');
+
+        return $disk;
     }
 }

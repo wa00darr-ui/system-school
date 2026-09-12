@@ -12,6 +12,17 @@ class SignedFile extends Model
     /** @use HasFactory<SignedFileFactory> */
     use HasFactory;
 
+    /**
+     * Types that are safe to render inline in the browser.
+     *
+     * @var list<string>
+     */
+    public const PREVIEWABLE_MIME_TYPES = [
+        'application/pdf',
+        'image/jpeg',
+        'image/png',
+    ];
+
     protected $fillable = [
         'original_name',
         'path',
@@ -24,5 +35,14 @@ class SignedFile extends Model
     public function document(): BelongsTo
     {
         return $this->belongsTo(Document::class);
+    }
+
+    public function isPreviewable(): bool
+    {
+        return in_array(
+            $this->mime_type,
+            self::PREVIEWABLE_MIME_TYPES,
+            true
+        );
     }
 }

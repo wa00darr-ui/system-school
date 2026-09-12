@@ -62,8 +62,15 @@ Route::middleware('auth')->group(function () {
         'destroy',
     ])->name('documents.destroy');
 
-    Route::get('/signed-files/{signedFile}/download', SignedFileController::class)
-        ->name('signed-files.download');
+    Route::get('/signed-files/{signedFile}/download', [
+        SignedFileController::class,
+        'download',
+    ])->name('signed-files.download');
+
+    Route::get('/signed-files/{signedFile}/preview', [
+        SignedFileController::class,
+        'preview',
+    ])->name('signed-files.preview');
 });
 
 Route::get('/document/{token}', [
